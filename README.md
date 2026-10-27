@@ -1,12 +1,12 @@
-# Offbeat
+# Offbeat — YouTube Music, Video & Playlist Downloader for Windows
 
-**A simple YouTube music and video downloader for Windows.**
+**Free, open-source desktop app with MP3, MP4, parallel downloads, and duplicate detection.**
 
 [![Tests](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/actions/workflows/tests.yml/badge.svg)](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/actions/workflows/tests.yml)
 
-Download videos, music, and full playlists in a dark desktop app. Save several files at once, skip duplicates, and keep your favorite playlists ready for their next update.
+Save YouTube music as MP3, videos as MP4, or entire playlists from a simple Windows desktop app. Offbeat provides a graphical interface for yt-dlp, with a dark theme, up to six simultaneous downloads, and saved playlists you can update with **Download new**.
 
-![Offbeat's dark desktop interface](https://github.com/user-attachments/assets/32042bd1-c686-4129-a212-46a8bf08aa68)
+![Offbeat YouTube downloader for Windows with a dark desktop interface](https://github.com/user-attachments/assets/32042bd1-c686-4129-a212-46a8bf08aa68)
 
 <details>
 <summary>See automatic first-time setup</summary>
@@ -17,7 +17,9 @@ Download videos, music, and full playlists in a dark desktop app. Save several f
 
 **Public beta · Windows x64 · Python + pywebview · Powered by yt-dlp and FFmpeg**
 
-## What it does
+[Features](#features) · [Windows setup](#using-offbeat-on-windows) · [FAQ](#frequently-asked-questions) · [User guide](docs/USAGE.md) · [Development](#development)
+
+## Features
 
 - **Music and video:** export MP3 at 128, 192, or 320 kbps, or MP4 up to the source's available quality.
 - **Parallel downloads:** run up to six transfers at once; three is the default.
@@ -60,6 +62,28 @@ The app prepares missing download tools after you choose a folder. Developers ca
 </details>
 
 See the [user guide](docs/USAGE.md) for formats, duplicate rules, upgrades, and queue controls, or the [troubleshooting guide](docs/TROUBLESHOOTING.md) when something fails.
+
+## Frequently asked questions
+
+### Can I save a whole YouTube playlist as MP3 or MP4?
+
+Yes. Paste a playlist link, click **Check links**, choose **Music** for MP3 or **Video** for MP4, review the items, and click **Download**. For a video link that also includes a playlist, keep **Full playlist** checked to include the other items. A failed item does not stop the remaining downloads.
+
+### Can Offbeat download multiple videos or songs at once?
+
+Yes. It runs three downloads at once by default. Set **Settings → Simultaneous downloads** to any number from one to six. This works for individual links and playlists; the speed gain depends on your connection and YouTube's limits.
+
+### How does duplicate detection work?
+
+Duplicate skipping is enabled by default. Offbeat checks the YouTube video ID and media type against saved files and queued items. Saving an MP3 does not prevent you from saving an MP4 of the same video. Different uploads of the same song are treated as separate videos; Offbeat does not compare audio fingerprints.
+
+### Can I download only new songs added to a playlist?
+
+Yes. Use **Save playlist** after checking a playlist, then open **Playlists → Download new** when you want to refresh it. Offbeat queues new or missing files using that playlist's saved format, quality, and destination. Refreshing a playlist does not delete your local files.
+
+### Do I need Python or a command prompt?
+
+The Windows EXE includes Python and the desktop app. Choose a folder and let the first launch prepare the download tools. You need Windows 10/11 x64, internet access, and WebView2. Running the source code instead requires Python 3.11 or later; the instructions are above.
 
 ## What to expect from the beta
 
