@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rafik-404.github.io/Offbeat-YouTube-Music-Video-Downloader/sitemap.xml
