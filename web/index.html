@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Offbeat — Your favorites, offline.</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/app.css"><script defer src="/app.js"></script></head>
+<body>
+<svg class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></symbol>
+<symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="5.5" cy="18" rx="3.5" ry="3"/><ellipse cx="16.5" cy="16" rx="3.5" ry="3"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></symbol>
+<symbol id="i-stack" viewBox="0 0 24 24"><path d="m12 3 10 5-10 5L2 8zm-9 9 9 5 9-5M3 16l9 5 9-5"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5h6l2 3h10v12H3z"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="m10 14 4-4m-6 6-1 1a4 4 0 0 1-6-6l5-5a4 4 0 0 1 6 0m0 12a4 4 0 0 0 6 0l5-5a4 4 0 0 0-6-6l-1 1" transform="translate(1 0) scale(.92)"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 8 3v6c0 5-4 9-8 11-4-2-8-6-8-11V5zM8 11l3 3 5-5"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 14 8-14 8z"/></symbol>
+<symbol id="i-retry" viewBox="0 0 24 24"><path d="M20 9a8 8 0 1 0 0 7M20 3v6h-6"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></symbol>
+<symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></symbol></defs></svg>
+<aside class="sidebar">
+  <a class="brand" href="#" aria-label="Offbeat home"><img src="/favicon.svg" alt="" width="39" height="39"><span>offbeat<span class="brand-dot">.</span></span></a>
+  <div class="sidebar-label">YOUR OFFLINE SPACE</div>
+  <nav aria-label="Main navigation">
+    <button class="nav-item active" data-page="download"><svg><use href="#i-download"/></svg>Download<span class="nav-arrow">↗</span></button>
+    <button class="nav-item" data-page="queue"><svg><use href="#i-stack"/></svg>Queue<span class="count" id="queue-count">0</span></button>
+    <button class="nav-item" data-page="playlists"><svg><use href="#i-bookmark"/></svg>Playlists<span class="count" id="playlist-count">0</span></button>
+    <button class="nav-item" data-page="library"><svg><use href="#i-music"/></svg>My library<span class="count" id="library-count">0</span></button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="mini-record"><div class="vinyl"><span></span></div><p>A little less buffering.<br>A little more you.</p></div>
+    <button class="nav-item" data-page="settings"><svg><use href="#i-settings"/></svg>Settings</button>
+    <div class="local-badge"><span></span> Made for your desktop <small>v1.3</small></div>
+  </div>
+</aside>
+<main>
+  <header class="topbar"><div><span class="breadcrumb">Your space</span><span class="separator">/</span><span id="page-name">Download</span></div><div class="engine-status" id="engine-status"><span class="status-dot"></span>Checking engine</div></header>
+  <div id="connection-error" class="notice error" hidden>Connection lost. Trying to reconnect…</div>
+  <section class="page" id="page-download">
+    <div class="hero"><div><div class="eyebrow">LESS STREAMING. MORE KEEPING.</div><h1>Your favorites,<br><span>offline.</span></h1><p>Music for the road. Videos for later.<br>Keep what you love, all in one place.</p></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="record"><i></i><div class="record-label"><svg><use href="#i-music"/></svg></div></div><div class="art-tag"><span></span> GOOD THINGS, ON REPEAT</div></div></div>
+    <form class="composer" id="link-form">
+      <div class="card-top"><h2>What are we saving?</h2><span class="subtle">Videos, playlists, or a little of both.</span></div>
+      <label class="sr-only" for="url">YouTube video or playlist links</label>
+      <div class="link-box"><svg><use href="#i-link"/></svg><textarea id="url" rows="3" placeholder="Paste YouTube links here…&#10;One per line. Up to 50 links." autocomplete="off" spellcheck="false" required></textarea><button class="paste-button" type="button" id="paste">Paste</button><button class="primary" id="inspect" type="submit">Check links<svg><use href="#i-arrow"/></svg></button></div>
+      <div class="options-row"><div class="format-toggle" role="group" aria-label="Download format"><button type="button" data-mode="audio" class="selected" aria-pressed="true"><svg><use href="#i-music"/></svg>Music <small>MP3</small></button><button type="button" data-mode="video" aria-pressed="false"><svg><use href="#i-video"/></svg>Video <small>MP4</small></button></div><label class="quality-label">Quality<select id="quality" aria-label="Download quality"></select></label><label class="check-label playlist-option"><input type="checkbox" id="whole-playlist" checked>Full playlists</label></div>
+      <div class="composer-footer"><label class="check-label"><input type="checkbox" id="skip-duplicates" checked><svg><use href="#i-shield"/></svg>Skip duplicates <span class="recommended">ON BY DEFAULT</span></label><button type="button" class="text-button" id="destination"><svg><use href="#i-folder"/></svg><span id="destination-name">Choose folder</span><span>↗</span></button></div>
+    </form>
+    <div id="preview-loading" class="loading-panel" hidden><span class="spinner"></span><div><strong>Finding your favorites…</strong><p id="preview-loading-text">Reading your links. Large playlists can take a moment.</p></div></div>
+    <div id="preview-error" class="notice error" role="alert" hidden></div>
+    <section id="preview-panel" class="preview-card" hidden><div class="section-head"><div><div class="eyebrow" id="preview-type">PLAYLIST PREVIEW</div><h2 id="preview-title"></h2><p id="preview-summary"></p></div><button class="icon-button" id="dismiss-preview" aria-label="Close preview"><svg><use href="#i-close"/></svg></button></div><div class="preview-toolbar"><label class="check-label"><input type="checkbox" id="select-all" checked>Select all</label><span id="selected-count"></span></div><div id="preview-warnings" class="batch-warnings" hidden></div><div id="preview-items" class="preview-items"></div><div class="preview-bottom"><span id="preview-footnote">Choose what comes with you.</span><div class="button-group"><button class="secondary" id="save-playlists" hidden><svg><use href="#i-bookmark"/></svg>Save playlist</button><button class="primary" id="add-downloads"><svg><use href="#i-download"/></svg><span>Download selected</span></button></div></div></section>
+    <section class="how-it-works" id="how-it-works"><div class="section-head"><h2>A few clicks. All yours.</h2><span class="eyebrow">THE SIMPLE WAY</span></div><div class="steps"><div><span class="step-number">01</span><h3>Drop a link</h3><p>A video or several playlists.<br>Paste all your links together.</p></div><div><span class="step-number">02</span><h3>Make it yours</h3><p>Choose music or video,<br>and the quality that fits.</p></div><div><span class="step-number">03</span><h3>Take it with you</h3><p>Save once. Skip duplicates.<br>Enjoy whenever you like.</p></div></div></section>
+    <div class="bottom-note"><svg><use href="#i-shield"/></svg>Your library stays on this computer.<span>Download content you own or have permission to save.</span></div>
+  </section>
+  <section class="page" id="page-queue" hidden><div class="page-heading"><div class="eyebrow">ON ITS WAY</div><h1>Your download queue<span>.</span></h1><p>More favorites, less waiting. Download several at once.</p></div><div class="parallel-bar"><span id="parallel-status">Up to 3 downloads at once</span><button class="text-button" data-page="settings">Adjust speed ↗</button></div><section class="download-overview" aria-label="Download overview">
+      <div class="overview-progress"><span id="overview-completed">0 of 0 saved or skipped</span><span id="overview-percent">0%</span></div>
+      <div class="overview-track" role="progressbar" aria-label="Queue progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="overview-bar"></span></div>
+      <div class="overview-metrics"><div><span>Total speed</span><strong id="overview-speed">0 MB/s</strong></div><div><span>Estimated time left</span><strong id="overview-eta">—</strong></div><div><span>Files remaining</span><strong id="overview-remaining">0</strong></div><div><span>Disk space free</span><strong id="overview-disk">—</strong></div></div>
+      <div class="queue-counts" id="queue-stats"></div>
+    </section><div class="section-head queue-toolbar"><div class="filter-tabs" id="queue-filters"><button class="active" data-filter="all">All</button><button data-filter="active">In progress</button><button data-filter="done">Completed</button><button data-filter="error">Needs attention</button></div><div class="button-group"><button id="retry-failed" class="text-button" hidden>Retry failed</button><button id="clear-queue" class="text-button">Clear finished</button><button id="pause-queue" class="secondary"></button></div></div><div id="paused-notice" class="notice" hidden>Queue paused. Active downloads will finish. Resume when you’re ready.</div><div id="cooldown-notice" class="notice" hidden></div><div id="queue-items" class="list-card"></div></section>
+  <section class="page" id="page-playlists" hidden><div class="page-heading"><div class="eyebrow">KEEP YOUR FAVORITES CLOSE</div><h1>Your saved playlists<span>.</span></h1><p>One click to collect new additions and replace missing files.</p></div><div class="section-head"><p class="playlist-explainer">Each playlist remembers its format, quality, and download folder.</p><button class="secondary" data-page="queue">View queue<svg><use href="#i-arrow"/></svg></button></div><div id="playlists-paused" class="notice" hidden>Your queue is paused. New items will wait until you resume it.</div><div id="saved-playlists" class="list-card"></div></section>
+  <section class="page" id="page-library" hidden><div class="page-heading"><div class="eyebrow">THE KEEPERS</div><h1>Your offline collection<span>.</span></h1><p>All the good things you’ve saved.</p></div><div class="section-head"><div class="search-box"><svg><use href="#i-search"/></svg><input id="library-search" aria-label="Search your library" placeholder="Find something in your library…"></div><button class="secondary" id="open-library"><svg><use href="#i-folder"/></svg>Open folder</button></div><div id="library-items" class="list-card"></div></section>
+  <section class="page" id="page-settings" hidden><div class="page-heading"><div class="eyebrow">JUST THE ESSENTIALS</div><h1>Make yourself at home<span>.</span></h1><p>A few small choices. A smoother download.</p></div><form id="settings-form" class="settings-card"><h2>Where everything lives</h2><p>Music and Videos get their own folders inside this location.</p><label for="folder-path" class="field-label">Download folder</label><div class="folder-edit"><input id="folder-path" required><button type="button" class="secondary" id="browse-folder"><svg><use href="#i-folder"/></svg>Browse</button></div><div class="setting-divider"></div><div class="setting-row"><div><h3><label for="concurrent-downloads">Simultaneous downloads</label></h3><p>Save several files at once. Three is a good starting point.<br>Lower this if YouTube limits requests or your connection slows down.</p></div><select id="concurrent-downloads" class="parallel-select" aria-label="Simultaneous downloads"><option value="1">1 at once</option><option value="2">2 at once</option><option value="3" selected>3 at once</option><option value="4">4 at once</option><option value="5">5 at once</option><option value="6">6 at once</option></select></div><div class="setting-divider"></div><div class="setting-row"><div><h3>Keep your library tidy</h3><p>Skip the same YouTube video when its MP3 or MP4 already exists.<br>Music and video copies are checked separately.</p></div><label class="switch"><input type="checkbox" id="settings-skip"><span></span><span class="sr-only">Skip duplicate downloads</span></label></div><div class="setting-info"><svg><use href="#i-shield"/></svg><p>Offbeat remembers video IDs, even if a title changes. Deleted files can be downloaded again. Different uploads of the same song are treated as separate videos.</p></div><div class="settings-actions"><span id="settings-feedback" role="status"></span><button class="primary" type="submit">Save changes<svg><use href="#i-check"/></svg></button></div></form><section class="settings-card update-card"><div class="section-head"><div><h2>Downloader updates</h2><p class="update-description">Keep the download engine current as YouTube changes.</p></div><span class="pill">Official releases</span></div><p id="update-version" class="update-description">yt-dlp · Check to see the installed and latest versions.</p><div id="update-message" role="status" class="update-message"></div><div id="update-progress" class="progress-track" hidden><span></span></div><div class="update-actions"><button id="check-update" class="secondary">Check for updates</button><button id="install-update" class="primary" hidden>Install update</button></div><p class="update-description update-footnote">Updates the downloader engine. Offbeat application updates are installed separately.</p></section><div class="about-card"><img src="/favicon.svg" width="42" height="42" alt=""><div><h3>Offbeat <span>1.3</span></h3><p>A quieter home for your favorite music and videos.</p><p class="subtle">Powered by yt-dlp & FFmpeg · Dark by default</p></div></div></section>
+</main><div id="toast" role="status" aria-live="polite"></div>
+<dialog id="first-run" class="setup-dialog" aria-labelledby="setup-title" aria-describedby="setup-description">
+  <form id="setup-form">
+    <div class="setup-mark" aria-hidden="true"><svg><use href="#i-folder"/></svg></div>
+    <div class="eyebrow">WELCOME TO OFFBEAT</div>
+    <h2 id="setup-title">Where should your<br>downloads go?</h2>
+    <p id="setup-description">Choose a home for your music and videos.<br>You can change it anytime in Settings.</p>
+    <label class="field-label" for="setup-folder">Save downloads to</label>
+    <div class="folder-edit"><input id="setup-folder" required autocomplete="off" spellcheck="false"><button type="button" id="setup-browse" class="secondary" autofocus><svg><use href="#i-folder"/></svg>Browse</button></div>
+    <p class="setup-hint">Music and Videos get their own folders inside this location.</p>
+    <div id="setup-error" class="notice error" role="alert" hidden></div>
+    <div class="setup-actions"><button type="submit" id="setup-confirm" class="primary">Use this folder<svg><use href="#i-arrow"/></svg></button></div>
+  </form>
+</dialog>
+</body></html>

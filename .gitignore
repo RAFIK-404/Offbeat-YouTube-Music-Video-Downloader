@@ -1,0 +1,52 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Downloaded tools, build output, and archives
+/bin/
+/build/
+/build-cache/
+/dist/
+/work/
+/outputs/
+*.spec
+*.exe
+*.dll
+*.zip
+*.7z
+*.tar
+*.gz
+*.xz
+
+# Personal state, media, and credentials
+/data/
+/Downloads/
+.offbeat-partials/
+*.mp3
+*.mp4
+*.webm
+*.m4a
+*.part
+*.ytdl
+*.log
+*connection*.json
+cookies*.txt
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
