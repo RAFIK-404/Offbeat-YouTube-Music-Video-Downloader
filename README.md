@@ -1,14 +1,23 @@
-<p align="center"><img src="web/favicon.svg" width="76" alt="Offbeat logo"></p>
-
 # Offbeat
 
 **A simple YouTube music and video downloader for Windows.**
+
+**[Download EXE only — Windows x64 (13.6 MB)](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/download/v1.3.1-beta.1/Offbeat-1.3.1-Windows-x64.exe)** · [View release](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.1-beta.1)
+
+Open the EXE, choose a download folder, and let first-time setup finish. No Python installation or source ZIP is required.
 
 [![Tests](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/actions/workflows/tests.yml/badge.svg)](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/actions/workflows/tests.yml)
 
 Download videos, music, and full playlists in a dark desktop app. Save several files at once, skip duplicates, and keep your favorite playlists ready for their next update.
 
-![Offbeat's dark desktop interface](docs/images/offbeat.png)
+![Offbeat's dark desktop interface](https://github.com/user-attachments/assets/32042bd1-c686-4129-a212-46a8bf08aa68)
+
+<details>
+<summary>See automatic first-time setup</summary>
+
+![Offbeat downloads and verifies its tools automatically](https://github.com/user-attachments/assets/364d9831-fe77-4365-878d-5a411c2df41e)
+
+</details>
 
 **Public beta · Windows x64 · Python + pywebview · Powered by yt-dlp and FFmpeg**
 
@@ -25,7 +34,11 @@ Download videos, music, and full playlists in a dark desktop app. Save several f
 
 ## Download for Windows
 
-### [Download Offbeat 1.3.1 EXE](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/download/v1.3.1-beta.1/Offbeat-1.3.1-Windows-x64.exe)
+| Download | Who it is for |
+| --- | --- |
+| **[EXE only — Offbeat 1.3.1 for Windows x64](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/download/v1.3.1-beta.1/Offbeat-1.3.1-Windows-x64.exe)** | **Recommended:** download, open, and use Offbeat. |
+| [Source code ZIP](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/archive/refs/tags/v1.3.1-beta.1.zip) | Developers who want to inspect or modify the code. |
+| [Checksums and license notices](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.1-beta.1) | Optional verification and third-party license details. |
 
 **No Python, terminal, or installer required.** Download the EXE to a writable folder and open it.
 
