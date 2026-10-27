@@ -50,3 +50,8 @@ cookies*.txt
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+/Offbeat-files/
+/build-exe/
+.offbeat-setup-*/
+.offbeat-tools-backup-*/

@@ -1,4 +1,6 @@
 'use strict';
+let componentRequestPending = false;
+let componentRequestError = '';
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const icon = (name) => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
@@ -220,6 +222,7 @@ function render() {
     setup.close();
     $('#url').focus();
   }
+  renderComponents();
   $('#queue-count').textContent = state.jobs.filter(j => activeStates.has(j.status)).length;
   $('#library-count').textContent = state.library.length;
   $('#playlist-count').textContent = state.playlists.length;
@@ -231,6 +234,29 @@ function render() {
   if (page === 'library') renderLibrary();
   if (page === 'playlists') renderPlaylists();
   if (page === 'settings') renderUpdater();
+}
+function renderComponents() {
+  const dialog = $('#component-setup');
+  const needed = state.setup_complete && !state.health.ready;
+  if (!needed) { if (dialog.open) dialog.close(); return; }
+  if (!dialog.open) dialog.showModal();
+  const components = state.components;
+  $('#components-message').textContent = componentRequestError || (components.status === 'ready' ? 'Some download tools are missing. Retry setup to restore them.' : components.message);
+  $('#components-message').classList.toggle('error-detail', components.status === 'error' || Boolean(componentRequestError));
+  $('#components-progress span').style.width = components.progress + '%';
+  $('#components-retry').hidden = !['error','ready'].includes(components.status) && !componentRequestError;
+  if (components.status === 'idle' && !componentRequestPending) startComponents();
+}
+async function startComponents() {
+  componentRequestPending = true;
+  componentRequestError = '';
+  $('#components-retry').hidden = true;
+  try { await api('components', {}); await refresh(); }
+  catch (error) {
+    componentRequestError = error.message;
+    $('#components-message').textContent = error.message;
+    $('#components-retry').hidden = false;
+  }
 }
 async function refresh() {
   try {
@@ -343,4 +369,6 @@ $('#saved-playlists').addEventListener('click', handle(async event => {
 }));
 $('#check-update').addEventListener('click', handle(async () => { await api('update', {action:'check'}); await refresh(); }));
 $('#install-update').addEventListener('click', handle(async () => { await api('update', {action:'install'}); await refresh(); }));
+$('#component-setup').addEventListener('cancel', event => event.preventDefault());
+$('#components-retry').addEventListener('click', startComponents);
 (async function poll() { await refresh(); setTimeout(poll, 1200); })();

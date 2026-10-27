@@ -14,6 +14,7 @@ import uuid
 
 from overview import queue_overview
 from updates import DownloaderUpdater
+from components import ComponentInstaller
 
 VIDEO_ID = re.compile(r"^[A-Za-z0-9_-]{11}$")
 ACTIVE = {"queued", "downloading", "converting", "retrying"}
@@ -162,6 +163,9 @@ class DownloadManager:
         self.update_release = None
         self.update_thread = None
         self.updater = DownloaderUpdater(engine.bin / "yt-dlp.exe") if hasattr(engine, "bin") else None
+        self.component_installer = ComponentInstaller(engine.bin) if hasattr(engine, "bin") else None
+        self.component_state = {"status":"idle", "progress":0, "message":"Preparing your download tools…"}
+        self.component_thread = None
         self.state = {"settings": {"folder": str(default_folder), "mode": "audio", "audio_quality": "320", "video_quality": "1080", "skip_duplicates": True, "concurrent_downloads": 3}, "jobs": [], "library": [], "playlists": [], "paused": False, "setup_complete": False}
         if self.path.exists():
             try:
@@ -195,6 +199,7 @@ class DownloadManager:
             result["preview"] = copy.deepcopy(self.preview_state)
             result["health"] = self.engine.health()
             result["updater"] = copy.deepcopy(self.update_state)
+            result["components"] = copy.deepcopy(self.component_state)
             result["cooldown_seconds"] = max(0, int(self.cooldown_until - time.monotonic()))
             for item in result["library"]:
                 item["exists"] = Path(item["path"]).is_file()
@@ -247,6 +252,8 @@ class DownloadManager:
         return None
 
     def preview(self, url, whole_playlist=True, saved_playlist=None):
+        if not self.engine.health()["ready"]:
+            raise ValueError("Your download tools are being set up. Please wait for setup to finish.")
         tokens = url.split()
         if not tokens or len(tokens) > 50 or len(url) > 50000:
             raise ValueError("Paste between 1 and 50 YouTube links, separated by spaces or new lines.")
@@ -350,6 +357,8 @@ class DownloadManager:
 
     def update_downloader(self, action):
         with self.lock:
+            if self.component_state["status"] == "installing" or not self.engine.health()["ready"]:
+                raise ValueError("Finish setting up the download tools first.")
             if action not in {"check", "install"}:
                 raise ValueError("Unknown update action.")
             if self.update_state["status"] in {"checking", "installing"}:
@@ -387,6 +396,34 @@ class DownloadManager:
                 self.wake.set()
         self.update_thread = threading.Thread(target=run_update, daemon=True)
         self.update_thread.start()
+        return {"ok":True}
+
+    def setup_components(self):
+        with self.lock:
+            if self.engine.health()["ready"] or self.component_state["status"] == "installing":
+                return {"ok":True}
+            if self.component_installer is None:
+                raise ValueError("Automatic setup is not available in this build.")
+            if self.workers or self.processes or self.preview_state["status"] == "loading" or self.update_state["status"] in {"checking","installing"}:
+                raise ValueError("Wait for active work to finish before setting up tools.")
+            self.component_state.update(status="installing", progress=0, message="Connecting to the official download servers…")
+
+        def progress(percent, message):
+            with self.lock:
+                self.component_state.update(progress=percent, message=message)
+
+        def install():
+            try:
+                self.component_installer.install(self.stopping, progress)
+                with self.lock:
+                    self.component_state.update(status="ready", progress=100, message="Ready to download.")
+            except Exception as exc:
+                with self.lock:
+                    self.component_state.update(status="error", message="Setup could not finish. " + str(exc)[:500])
+            finally:
+                self.wake.set()
+        self.component_thread = threading.Thread(target=install, daemon=True)
+        self.component_thread.start()
         return {"ok":True}
 
     def add(self, preview_id, video_ids):
@@ -491,7 +528,7 @@ class DownloadManager:
     def run(self):
         while not self.stopping.is_set():
             with self.lock:
-                if self.update_state["status"] != "installing" and self.state["setup_complete"] and not self.state["paused"] and time.monotonic() >= self.cooldown_until and not self.stopping.is_set():
+                if self.component_state["status"] != "installing" and self.engine.health()["ready"] and self.update_state["status"] != "installing" and self.state["setup_complete"] and not self.state["paused"] and time.monotonic() >= self.cooldown_until and not self.stopping.is_set():
                     busy = {(j["video_id"], j["mode"]) for j in self.state["jobs"] if j["id"] in self.workers}
                     for job in self.state["jobs"]:
                         if len(self.workers) >= self.state["settings"]["concurrent_downloads"]:

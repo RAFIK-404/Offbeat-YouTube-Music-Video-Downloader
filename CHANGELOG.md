@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.1 — Standalone Windows beta
+
+- Download and open one EXE without installing Python.
+- First launch downloads and verifies the official downloader tools after folder selection.
+- Setup includes progress, retry, staging, executable checks, and rollback on installation failure.
+- Tools and settings are reused from Offbeat-files beside the EXE; existing portable data is retained when found beside it.
+- Embedded runtime licenses are accessible from Settings.
+- Nine setup regression tests bring the suite to 49 tests.
+
 ## 1.3 — First public beta
 
 ### Added

@@ -23,29 +23,36 @@ Download videos, music, and full playlists in a dark desktop app. Save several f
 - **Simple setup:** choose your download folder on first launch. Dark mode is the default.
 - **Engine updates:** check for official yt-dlp updates inside Settings, with SHA-256 verification before installation.
 
-## Get started
+## Download for Windows
 
-This first public beta is distributed as source. A public portable Windows download is pending completion of the bundled dependencies' redistribution package.
+### [Download Offbeat 1.3.1 EXE](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/download/v1.3.1-beta.1/Offbeat-1.3.1-Windows-x64.exe)
 
-**[Download the source beta](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.0-beta.1)** · [Report a problem](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/issues/new/choose)
+**No Python, terminal, or installer required.** Download the EXE to a writable folder and open it.
 
-Requirements: **64-bit Windows 10/11**, **Python 3.11 or newer**, internet access, and the [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/).
+1. Choose where to save your music and videos.
+2. On the first launch, wait while Offbeat downloads and verifies yt-dlp, Deno, and FFmpeg directly from their official releases. This needs internet access and may take a few minutes. Your tools are reused on later launches.
+3. Paste links, choose **Music** or **Video**, and click **Download** after checking your selection.
 
-Download this repository with **Code → Download ZIP**, extract it, and open PowerShell in its folder:
+Requires **64-bit Windows 10/11**, internet access, and the [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/). This beta EXE is unsigned, so Windows may show an unfamiliar-app warning. No instructions to disable security software are needed.
+
+Offbeat creates **Offbeat-files/** beside the EXE for its tools and settings. Keep that folder when upgrading or moving the app. Media goes to your chosen download folder. If an older `data/library.json` already exists beside the EXE, Offbeat reuses that installation's data and tools instead.
+
+[Release notes and checksums](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.1-beta.1) · [Report a problem](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/issues/new/choose)
+
+<details>
+<summary>Run from source instead</summary>
+
+Install Python 3.11+, download this repository, and run these commands in its folder:
 
 ```powershell
 py -3 -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
-.venv\Scripts\python.exe scripts\fetch_tools.py
 .venv\Scripts\python.exe app.py
 ```
 
-The setup script downloads yt-dlp, Deno, and FFmpeg from their official GitHub releases and verifies their published SHA-256 digests. These tools are downloaded to your computer; their binaries are not committed to this repository.
+The app prepares missing download tools after you choose a folder. Developers can also run `scripts/fetch_tools.py` explicitly.
 
-1. Choose where to save downloads.
-2. Paste your links and click **Check links**.
-3. Choose **Music** or **Video**, quality, and the items to save.
-4. Click **Download**. To revisit a playlist, choose **Save playlist**, then use **Playlists → Download new** next time.
+</details>
 
 See the [user guide](docs/USAGE.md) for formats, duplicate rules, upgrades, and queue controls, or the [troubleshooting guide](docs/TROUBLESHOOTING.md) when something fails.
 
@@ -63,7 +70,7 @@ Use Offbeat for content you own or have permission to save. Offbeat is an indepe
 
 ## Your data
 
-Settings, saved playlists, and download history stay in `data/` beside the app. Media goes to the folder you choose. The interface talks to a local server bound to `127.0.0.1`, with a different access token on each launch.
+For the standalone EXE, settings, saved playlists, and download history stay in `Offbeat-files/data/` beside the EXE. Source and older portable installations use `data/` in their app folder. Media goes to the folder you choose. The interface talks to a local server bound to `127.0.0.1`, with a different access token on each launch.
 
 Offbeat's own code has no analytics or telemetry. It contacts YouTube for metadata and media, YouTube's image service for thumbnails, and GitHub for requested dependency downloads or update checks. Keep the `data/` folder private: it contains your playlist links, history, and local paths.
 
@@ -78,14 +85,14 @@ py -3 -m unittest discover -s tests -v
 # Check frontend syntax (Node.js required for this check only)
 node --check web/app.js
 
-# Build a portable app for local testing, after the setup steps above
+# Build the standalone EXE, after the source setup steps above
 .venv\Scripts\python.exe -m pip install -r requirements-build.txt
-.venv\Scripts\python.exe scripts\build.py
+.venv\Scripts\python.exe scripts\build_exe.py
 ```
 
-Build output goes to `dist/Offbeat/`. Keep its complete directory together. Review [release preparation](docs/RELEASING.md) before distributing bundled binaries.
+The standalone EXE is written to `dist/`. It contains the app, Python, its desktop dependencies, and their license notices. Download tools are fetched on the end user's computer. See [release preparation](docs/RELEASING.md) for verification and packaging.
 
-The current suite has **40 automated tests** covering queue behavior, persistence, duplicates, saved playlists, updates, first-run setup, and API access checks. See [CONTRIBUTING.md](CONTRIBUTING.md) for development and issue-reporting guidelines. GitHub Actions runs the suite and JavaScript syntax check on Windows after pushes and pull requests.
+The current suite has **49 automated tests** covering queue behavior, persistence, duplicates, saved playlists, updates, first-run setup, API access checks, component verification, interrupted setup, and installation rollback. See [CONTRIBUTING.md](CONTRIBUTING.md) for development and issue-reporting guidelines. GitHub Actions runs the suite and JavaScript syntax check on Windows after pushes and pull requests.
 
 ## License and credits
 

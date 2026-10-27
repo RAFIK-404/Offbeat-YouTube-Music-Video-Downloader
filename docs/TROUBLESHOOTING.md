@@ -28,11 +28,11 @@ An MP4 can contain a modern codec that your player does not support. Try another
 
 ## Folder selection or saving fails
 
-Choose a folder you can write to, with sufficient free space. Keep the whole portable app in a writable folder. Its settings and history live in `data/` beside the executable. If you move the app, check the destination in Settings; saved playlists also remember their own paths.
+Choose a folder you can write to, with sufficient free space. Keep the EXE in a writable folder. A fresh standalone app stores settings and history in `Offbeat-files/data/` beside it; older portable installations retain `data/`. If you move the app, check the destination in Settings; saved playlists also remember their own paths.
 
 ## The desktop window will not open
 
-Confirm that you are using 64-bit Windows and have the Microsoft Edge WebView2 Runtime. Source users also need Python 3.11+ and the dependencies from `requirements.txt`. Keep the packaged executable with its `_internal` and `bin` folders.
+Confirm that you are using 64-bit Windows and have the Microsoft Edge WebView2 Runtime. Source users also need Python 3.11+ and the dependencies from `requirements.txt`. The standalone EXE prepares missing tools on first launch. Keep its `Offbeat-files/` folder when moving or upgrading it. Older folder-based builds still need their `_internal` and `bin` directories.
 
 ## An engine update fails
 
@@ -41,3 +41,7 @@ Pause the queue and wait for active transfers and link checks to finish. Check y
 ## Reporting an issue
 
 Include a minimal reproduction and the error text. Redact personal paths, tokens, and private playlist links. Never attach your entire `data/` folder. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+
+## First-launch tool setup fails
+
+Keep the internet connection on and check that GitHub downloads are reachable. Setup needs enough disk space for the tools and temporary archives. Use **Retry setup** after correcting the issue. A digest mismatch prevents installation; do not substitute an unverified executable. Closing during setup is safe for installed tools; reopen to start setup again.

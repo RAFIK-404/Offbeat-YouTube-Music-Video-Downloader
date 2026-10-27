@@ -2,16 +2,17 @@
 
 A small Windows desktop app for YouTube music, videos, and full playlists.
 
-## Use the portable app
+## Use the Windows EXE
 
-1. Extract the entire **Offbeat-Windows-v1.3.zip** archive.
-2. Open the **Offbeat** folder and double-click **Offbeat.exe**.
-3. On first launch, choose your download folder using **Browse**, then click **Use this folder**.
+1. Download `Offbeat-1.3.1-Windows-x64.exe` from the GitHub release and open it from a writable folder.
+2. Choose your download folder using **Browse**, then click **Use this folder**.
+3. Wait for first-launch tool setup. Offbeat downloads the official tools, verifies their SHA-256 digests, and checks that they start. Internet access is required. If setup fails, use **Retry setup**.
 4. Paste one or several YouTube links and click **Check links**.
-5. Choose **Music (MP3)** or **Video (MP4)**, then choose quality.
-6. Select the playlist items you want and click **Download**.
+5. Choose music or video, quality, and the items to save, then click **Download**.
 
-No Python installation, account, API key, or command prompt is needed. Windows 10/11, 64-bit, with Microsoft Edge WebView2 Runtime is required. WebView2 is already present on most Windows 10/11 computers. Keep the executable, `_internal`, and `bin` folders together. This is a portable, unsigned development build.
+No Python installation, account configuration, API key, or command prompt is needed. Requires Windows 10/11 x64 and the Microsoft Edge WebView2 Runtime. The EXE is an unsigned public beta.
+
+Tools and settings are kept in `Offbeat-files/` beside the EXE and reused on later launches. Keep that folder when updating or moving the application. Media is saved to the location you choose. A pre-existing `data/library.json` beside the EXE selects the earlier portable layout, retaining that installation's history and settings.
 
 The **Full playlist** checkbox includes every listed item when a video link also contains a playlist ID. Uncheck it to take only the linked video. Incomplete playlist metadata is marked **Check on download** and stays selectable. Each download checks the video's actual availability; live/upcoming streams are excluded. A failed item does not stop the rest of a playlist.
 
@@ -27,15 +28,15 @@ The interface starts in **dark mode**. Downloads run **3 at once** by default. C
 
 **Download overview:** The queue shows combined transfer speed, saved/skipped totals, remaining items, progress, estimated time, and available disk space. Estimates use current transfers and recently completed files; **Calculating…** means there is not enough information yet. Connection delays and conversion can change estimates. A paused queue has no completion estimate. Totals cover the queue's current history until you clear finished rows. Free space includes destinations of unfinished jobs; when multiple destinations exist, the smallest available value is shown, with details on hover.
 
-## Upgrade from 1.0, 1.1, or 1.2
+## Upgrade from an earlier local build
 
-Close the old Offbeat app first. Extract the new archive into the same parent folder as your existing `Offbeat` folder and allow the app files to be replaced. Keep the existing **data** and **Downloads** folders; neither is included in the update ZIP. Saved settings, history, duplicate detection, and queued items carry over. The new simultaneous-download setting defaults to 3. The queue stays paused after reopening if it contains unfinished work: use **Retry failed** for interrupted items, then **Resume queue**.
+Close the old Offbeat app first. Place the new EXE in the same folder as the older executable, alongside the existing `data/` directory. It detects and reuses that installation. Keep the existing **data** and **Downloads** folders; neither is included in the update ZIP. Saved settings, history, duplicate detection, and queued items carry over. The new simultaneous-download setting defaults to 3. The queue stays paused after reopening if it contains unfinished work: use **Retry failed** for interrupted items, then **Resume queue**.
 
 **Music:** MP3 at 128, 192, or 320 kbps. A higher export bitrate cannot improve the original source quality. **Video:** MP4 up to 720p, 1080p, 4K, or best available; the actual resolution depends on the source. MP4 may contain AV1 or another modern codec, depending on YouTube's formats and quality selection.
 
 ## Folders and duplicates
 
-On first launch, Offbeat asks where to save downloads. It suggests `Downloads` beside the app; browse to another folder or confirm this suggestion. The folder is checked for write access before setup completes. Cancelling the folder picker or closing the app leaves setup pending for the next launch. After confirmation, Offbeat remembers your choice and opens normally. Existing installations keep their saved location without repeating setup. Use **Settings → Browse** to change it later. Music and Videos get separate subfolders. Settings, library records, and queue state live in `data` beside the executable.
+On first launch, Offbeat asks where to save downloads. It suggests a `Downloads` folder inside the app's persistent folder; browse to another folder or confirm this suggestion. The folder is checked for write access before setup completes. Cancelling the folder picker or closing the app leaves setup pending for the next launch. After confirmation, Offbeat remembers your choice and opens normally. Existing installations keep their saved location without repeating setup. Use **Settings → Browse** to change it later. Music and Videos get separate subfolders. Settings, library records, and queue state live in `Offbeat-files/data` for a fresh standalone installation, or the existing `data` directory for an older portable installation.
 
 Duplicate skipping is on by default. Offbeat matches the **YouTube video ID plus media type**, not the title. It checks saved files from earlier sessions, existing files with `[video-id]` in the selected folder's filenames, and items already queued. An MP3 does not block the MP4 of the same video. Changing the video resolution or MP3 bitrate still counts as the same media type; turn off skipping to save an additional version with a unique filename.
 
@@ -72,10 +73,10 @@ Open the printed URL including its fragment token. The server binds only to `127
 
 ```powershell
 .venv\Scripts\python -m pip install -r requirements-build.txt
-.venv\Scripts\python scripts\build.py
+.venv\Scripts\python scripts\build_exe.py
 ```
 
-This creates `dist/Offbeat`. Keep its complete directory. The bundle includes the Python runtime, WebView2 bridge, download engine, JavaScript runtime, FFmpeg, and FFprobe. It uses the installed WebView2 runtime rather than bundling a second browser.
+This creates a standalone EXE in `dist/`. It includes Python and the desktop shell, and downloads the media tools on first launch. It uses the installed WebView2 runtime rather than bundling a second browser.
 
 ## Tests
 

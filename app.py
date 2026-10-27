@@ -16,6 +16,8 @@ from engine import DownloadManager, Engine
 
 ROOT = Path(__file__).resolve().parent
 APP_ROOT = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else ROOT
+if getattr(sys, "frozen", False) and (ROOT / "single-file.json").is_file() and not (APP_ROOT / "data/library.json").is_file():
+    APP_ROOT = APP_ROOT / "Offbeat-files"
 
 
 def make_server(manager, token, port=0, folder_picker=None):
@@ -54,6 +56,11 @@ def make_server(manager, token, port=0, folder_picker=None):
 
         def do_GET(self):
             route = urlparse(self.path).path
+            if route == "/licenses":
+                notice = ROOT / "THIRD-PARTY-LICENSES.txt"
+                content = notice.read_bytes() if notice.exists() else (ROOT / "THIRD-PARTY-NOTICES.md").read_bytes()
+                self.send(200, content, "text/plain; charset=utf-8")
+                return
             if route.startswith("/api/"):
                 if not self.authorized():
                     return
@@ -97,6 +104,8 @@ def make_server(manager, token, port=0, folder_picker=None):
                         result = manager.playlist_action(data.get("action"), data.get("id"))
                 elif route == "/api/update":
                     result = manager.update_downloader(data.get("action"))
+                elif route == "/api/components":
+                    result = manager.setup_components()
                 elif route == "/api/action":
                     manager.action(data.get("action"), data.get("id"))
                     result = {"ok": True}
@@ -143,11 +152,13 @@ def main():
     parser.add_argument("--data-dir", type=Path)
     parser.add_argument("--downloads", type=Path)
     parser.add_argument("--connection-file", type=Path)
+    parser.add_argument("--app-dir", type=Path, help="Override the persistent app folder (for isolated testing).")
     args = parser.parse_args()
     # Portable by default: the application writes only beside itself and inside
     # the user-selected destination. Each portable copy has its own library.
-    data_dir = args.data_dir or APP_ROOT / "data"
-    destination = args.downloads or APP_ROOT / "Downloads"
+    app_root = args.app_dir or APP_ROOT
+    data_dir = args.data_dir or app_root / "data"
+    destination = args.downloads or app_root / "Downloads"
     data_dir.mkdir(parents=True, exist_ok=True)
     instance_lock = (data_dir / ".instance.lock").open("a+b")
     if os.name == "nt":
@@ -164,7 +175,7 @@ def main():
                 ctypes.windll.user32.MessageBoxW(0, "Offbeat is already open. Switch to its existing window.", "Offbeat", 64)
             instance_lock.close()
             return
-    manager = DownloadManager(data_dir, Engine(APP_ROOT), destination)
+    manager = DownloadManager(data_dir, Engine(app_root), destination)
     token = secrets.token_urlsafe(32)
     picker = FolderPicker()
     server = make_server(manager, token, args.port, picker.choose_folder if not args.headless else None)

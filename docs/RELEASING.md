@@ -1,36 +1,31 @@
-# Preparing a release
+# Preparing a Windows release
 
-## Initial publication
+## Standalone EXE
 
-The prepared GitHub package contains application source, documentation, tests, and a screenshot of an empty app. It excludes executable dependencies, user history, downloaded media, and local verification artifacts.
-
-Publish the first version as a **pre-release**, with tag `v1.3.0-beta.1` and title **Offbeat 1.3 — First public beta**. The application displays version 1.3. The suffix identifies the initial public distribution of that version.
-
-Before publication, the owner should review the prepared MIT license for original Offbeat code. This license does not replace dependency licenses. Run the test workflow once the repository exists; local tests do not establish that a hosted Actions run has passed.
-
-## Validation
+Build on 64-bit Windows using a dedicated Python environment:
 
 ```powershell
-py -3 -m unittest discover -s tests -v
-node --check web/app.js
+py -3 -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements-build.txt
+.venv\Scripts\python.exe scripts\build_exe.py
 ```
 
-For a new Windows build, test fresh startup, folder selection, reopening with existing settings, a small parallel-download queue, duplicates, and an engine update check using an isolated profile. Confirm that shutdown leaves recoverable work and that the next launch does not silently start unfinished transfers.
+The EXE bundles Python, pywebview, desktop dependencies, and their license notices. It does not bundle yt-dlp, Deno, FFmpeg, or FFprobe. First-launch setup downloads those tools directly from the official release repositories on the user's computer. No Python installation is needed on that computer. WebView2 remains a system prerequisite.
 
-## Bundled Windows release: remaining work
+`Offbeat-files/` beside the EXE stores tools and app data. A pre-existing `data/library.json` beside the EXE selects the older portable layout, preserving settings and history. The `--app-dir` option supports isolated verification without touching a user's normal installation.
 
-The existing local portable ZIP is **not cleared for public redistribution**. Its FFmpeg package is a GPL build, and the collected license text and upstream links do not establish that a complete corresponding-source distribution has been supplied. The recorded FFmpeg URL uses a moving `latest` tag, so it does not identify an immutable source revision by itself.
+## Verify before uploading
 
-Before attaching a portable ZIP:
+1. Run `python -m unittest discover -s tests -v` and `node --check web/app.js`.
+2. Start the built EXE with an empty app folder. Choose a destination and verify that official tool setup completes, manifests contain hashes, and all tools start.
+3. Reopen the same profile and verify that setup does not repeat. Test a small audio/video download queue and duplicates.
+4. Verify that the EXE contains runtime licenses and that `/licenses` returns them. Preserve Microsoft's WebView2 SDK license and notices alongside the Python licenses.
+5. Confirm that release assets contain no local data, media, tokens, or personal paths. Compute SHA-256 checksums from the exact uploaded files.
 
-1. Identify the exact FFmpeg and linked-library revisions, build configuration, scripts, and patches corresponding to the distributed binaries. Retain the original verified archive and its hash.
-2. Assemble the required corresponding sources and notices, and provide them with the binary release using the applicable distribution terms. Review the upstream executables' other bundled components as well, including yt-dlp, Deno, and the packaged Python runtime.
-3. Preserve third-party notices in the app and release assets. Do not describe the entire bundle as MIT-licensed.
-4. Build from the intended source revision, verify it on a clean Windows profile, and calculate SHA-256 hashes for the final archives.
-5. Put ZIPs and source archives in **GitHub Releases**, not in the source repository. Keep `data/`, `Downloads/`, `.offbeat-partials/`, logs, and connection files out of every release archive.
+For 1.3.1 use tag `v1.3.1-beta.1`, marked as a pre-release. Attach `Offbeat-1.3.1-Windows-x64.exe`, `THIRD-PARTY-LICENSES.txt`, and `SHA256SUMS.txt`. The tag must point to the tested source commit. GitHub also generates source archives. The EXE is unsigned; do not claim code signing or broad Windows compatibility testing that has not been performed.
 
-Official references: [FFmpeg licensing information](https://ffmpeg.org/legal.html), [FFmpeg build project](https://github.com/yt-dlp/FFmpeg-Builds), [yt-dlp license information](https://github.com/yt-dlp/yt-dlp#license), and [GitHub binary distribution guidance](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github#distributing-large-binaries).
+## Earlier offline bundle
 
-`tools-manifest.json` records the dependency archives used for the local 1.3 build. `scripts/fetch_tools.py` intentionally downloads the currently published releases and rewrites that manifest. It does not reproduce the recorded build exactly. The in-app yt-dlp update can also change the installed engine independently of the recorded build manifest.
+`scripts/build.py` remains available for local development with all tools bundled. Do not publish that older offline bundle without assembling its exact corresponding sources and notices. Its FFmpeg build includes GPL components, and the recorded moving `latest` tag does not identify a complete immutable source revision. The standalone release avoids redistributing those tool binaries; it retrieves them from their official publishers on each user's first launch.
 
-Code signing and additional Windows 10/11 testing are recommended before calling the portable build stable. Existing local validation was performed on Windows 11, and packaged builds are unsigned.
+References: [PyInstaller's distribution exception](https://pyinstaller.org/en/stable/license.html), [FFmpeg licensing](https://ffmpeg.org/legal.html), and [GitHub release assets](https://docs.github.com/en/rest/releases/assets).
