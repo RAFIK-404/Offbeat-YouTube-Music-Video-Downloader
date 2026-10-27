@@ -2,10 +2,6 @@
 
 **A simple YouTube music and video downloader for Windows.**
 
-**[Download EXE only — Windows x64 (13.6 MB)](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/download/v1.3.1-beta.1/Offbeat-1.3.1-Windows-x64.exe)** · [View release](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.1-beta.1)
-
-Open the EXE, choose a download folder, and let first-time setup finish. No Python installation or source ZIP is required.
-
 [![Tests](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/actions/workflows/tests.yml/badge.svg)](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/actions/workflows/tests.yml)
 
 Download videos, music, and full playlists in a dark desktop app. Save several files at once, skip duplicates, and keep your favorite playlists ready for their next update.
@@ -32,13 +28,9 @@ Download videos, music, and full playlists in a dark desktop app. Save several f
 - **Simple setup:** choose your download folder on first launch. Dark mode is the default.
 - **Engine updates:** check for official yt-dlp updates inside Settings, with SHA-256 verification before installation.
 
-## Download for Windows
+## Using Offbeat on Windows
 
-| Download | Who it is for |
-| --- | --- |
-| **[EXE only — Offbeat 1.3.1 for Windows x64](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/download/v1.3.1-beta.1/Offbeat-1.3.1-Windows-x64.exe)** | **Recommended:** download, open, and use Offbeat. |
-| [Source code ZIP](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/archive/refs/tags/v1.3.1-beta.1.zip) | Developers who want to inspect or modify the code. |
-| [Checksums and license notices](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.1-beta.1) | Optional verification and third-party license details. |
+Windows builds, release notes, checksums, and license notices are published in this repository's **Releases** section.
 
 **No Python, terminal, or installer required.** Download the EXE to a writable folder and open it.
 
@@ -50,7 +42,7 @@ Requires **64-bit Windows 10/11**, internet access, and the [Microsoft Edge WebV
 
 Offbeat creates **Offbeat-files/** beside the EXE for its tools and settings. Keep that folder when upgrading or moving the app. Media goes to your chosen download folder. If an older `data/library.json` already exists beside the EXE, Offbeat reuses that installation's data and tools instead.
 
-[Release notes and checksums](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/releases/tag/v1.3.1-beta.1) · [Report a problem](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/issues/new/choose)
+[Report a problem](https://github.com/RAFIK-404/Offbeat-YouTube-Music-Video-Downloader/issues/new/choose)
 
 <details>
 <summary>Run from source instead</summary>
